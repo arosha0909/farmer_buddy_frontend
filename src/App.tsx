@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignIn from './base/auth/signIn';
 import Dashboard from './base/admin/dashboard';
 import SignUp from './base/auth/signup';
+import { UserTypes } from 'enum/userTypes';
+import Authmiddleware from 'middleware/authMiddleware';
 
 const App: React.FC = () => {
   return (
@@ -15,16 +17,17 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/signin" element={<SignIn />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
-          {/* <Route element={<></>}>
-              <NavBar />
-              <PageBodyWrapper>
+
+          <Route element={<Authmiddleware allowed={UserTypes.SUPER_ADMIN} />}>
+            <Route element={<NavBar />}/> {/* NavBar wrapped with a Route */}
+            <Route path="/admin" element={
+              <React.Fragment>
                 <MainPanel>
-                  <Route path="/admin">
-                    <Route path="/" element={<Dashboard/>}></Route>
-                  </Route>
+                  <Route path="/" element={<Dashboard />}></Route>
                 </MainPanel>
-              </PageBodyWrapper>
-            </Route> */}
+              </React.Fragment>
+            }/>
+          </Route>
         </Routes>
       </div>
     </Router>

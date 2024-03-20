@@ -4,7 +4,8 @@ import { useForm, Resolver, FieldErrors } from "react-hook-form";
 import { RouteContext } from 'context/routeProvider';
 import { RequestState } from 'enum/requestState';
 import { AuthService } from 'services/authService';
-import jwt_decode from 'jwt-decode';
+import {jwtDecode } from 'jwt-decode';
+import { toast } from 'react-toastify';
 
   type FormValues = {
     email: string
@@ -48,11 +49,7 @@ const SignIn: React.FC = () => {
     const [isProtected, setIsProtected] = useContext(RouteContext)
     const [loginRequestState, setLoginRequestState] = useState<RequestState>(RequestState.INITIAL)
     
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<FormValues>({ resolver })
+    const { register, handleSubmit, formState: { errors }, } = useForm<FormValues>({ resolver })
 
     const onSubmit = handleSubmit(async (data) => {
       console.log(data);
@@ -63,12 +60,20 @@ const SignIn: React.FC = () => {
 
         if (res.success) {
           setLoginRequestState(RequestState.SUCCESS)
-          // const data: any = await jwt_decode(res.data)
-          // navigate(`/${data?.user_role}/dashboard`, { replace: true })
+          const data: any = await jwtDecode (res.data as any);
+          navigate(`/${data?.user_role}/dashboard`, { replace: true });
         } else if (res.errorCode === 1) {
-
+          setLoginRequestState(RequestState.FAILED)
+          setIsProtected(true)
+          navigate("/email-verification", { state: { email: email } })
         } else {
-
+          setLoginRequestState(RequestState.FAILED)
+        
+          toast.error(res.error, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            className: "foo-bar",
+            style: {marginBottom: "4rem"},
+          })
         }
 
       } catch(e) {
