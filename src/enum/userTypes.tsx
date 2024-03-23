@@ -1,8 +1,10 @@
 export enum UserTypes {
-    SUPER_ADMIN = "SUPER_ADMIN",
-    DISPATCH = "DISPATCH",
-    FACTORY = "FACTORY",
-    FARMER = "FARMER",
-    DRIVER = "DRIVER",
+    SUPER_ADMIN = "super_admin",
+    ADMIN = "admin",
+    DISPATCH = "dispatch",
+    FACTORY = "factory",
+    FARMER = "farmer",
+    DRIVER = "driver",
+    CLIENT = "client",
   }
   

@@ -13,7 +13,7 @@ export class AuthService {
     private static readonly TOKEN_KEY = "token";
 
     public static async getMe(): Promise<AppResponse<User>> {
-      const ep = Util.apiAuthUrl("me");
+      const ep = Util.apiAuthUrl("self");
       const res = await axios.get<void, AppResponse<User>>(ep);
       if (res.error) {
        localStorage.removeItem(AuthService.TOKEN_KEY);

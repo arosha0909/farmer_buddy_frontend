@@ -11,24 +11,10 @@ export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<User | undefined>(undefined);
   const navigate = useNavigate();
 
-  const clearCrispSessionLocalStorage = () => {
-    const crispSessionPrefix = "crisp-client/session/";
-
-    // Get all keys from local storage
-    const keys = Object.keys(localStorage);
-
-    // Filter and remove keys that match the Crisp session prefix
-    keys.forEach(key => {
-      if (key.startsWith(crispSessionPrefix)) {
-        localStorage.removeItem(key);
-      }
-    });
-  };
 
   const logout = () => {
     navigate(`/signin`, { replace: true });
     localStorage.removeItem("token");
-    clearCrispSessionLocalStorage();;
     setUser({} as any);
     //refresh the client browser after signout for safe end Crisp chat session
     window.location.reload();
